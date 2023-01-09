@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "###########################################################################"
-echo "############## Setup traefic as the clusters' load balancer ###############"
+echo "Setup Traefik as the clusters' load balancer"
 echo "###########################################################################"
 
 HOME_V="/home/vagrant"
@@ -11,7 +11,7 @@ HOME_V="/home/vagrant"
 
 #------------------------------------------------------------------------
 
-echo 'configuring traefik...'
+echo 'configuring Traefik...'
 # apt-get install -y python3-yaml
 python3 - <<'EOF'
 import difflib
@@ -82,6 +82,6 @@ EOF
 
 #------------------------------------------------------------------------
 
-sed -i "s/{{DOMAIN}}/$(hostname --domain)/g" $HOME_V/manifests/traefic_ingress_controller/ingress.yaml
-kubectl apply -n kube-system -f $HOME_V/manifests/traefic_ingress_controller/ingress.yaml
-sed -i "s/$(hostname --domain)/{{DOMAIN}}/g" $HOME_V/manifests/traefic_ingress_controller/ingress.yaml
+sed -i "s/{{DOMAIN}}/$(hostname --domain)/g" $HOME_V/manifests/traefik_ingress_controller/ingress.yaml
+kubectl apply -n kube-system -f $HOME_V/manifests/traefik_ingress_controller/ingress.yaml
+sed -i "s/$(hostname --domain)/{{DOMAIN}}/g" $HOME_V/manifests/traefik_ingress_controller/ingress.yaml
