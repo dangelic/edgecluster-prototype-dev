@@ -1,0 +1,33 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: demo-webserver-argo-application
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/dangelic/edgecluster-prototype-cd-clusterstate
+    targetRevision: HEAD
+    # Path inside the GIT repository that is in sync.
+    path: __insync__demo-webserver
+  destination:
+    # Internal API-Server of the cluster. Sufficient as we run ArgoCD in the cluster itself 
+    # See "kubectl get svc".
+    server: https://kubernetes.default.svc
+    # The namespace where manifests found by ArgoCD are applied at
+    # It will be created if it does not exist
+    namespace: demo-webserver
+
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
+
+    automated:
+      selfHeal: true
+      prune: true
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        factor: 3
+        maxDuration: 3m
