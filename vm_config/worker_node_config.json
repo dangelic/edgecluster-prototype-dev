@@ -14,7 +14,7 @@
     {
         "vname": "edgenode-2-k3s",
         "hostname": "edgenode-2",
-        "device_id": "nd777YYaMs1",
+        "device_id": "qd787YYaXs1",
         "device_description": "Edge: Raspberry für Produktionsfeld A",
         "tags": ["edge","Pi","A", "sensor_type1=2"],
         "mem": 2048,
