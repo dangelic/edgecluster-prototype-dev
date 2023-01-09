@@ -1,0 +1,22 @@
+[
+    {
+        "vname": "masternode-1-k3s",
+        "hostname": "masternode-1",
+        "device_description": "Main Server Produktion Halle 1",
+        "tags": ["core, halle1, main, linie1"],
+        "mem": 2048,
+        "cpu": 2,
+        "ip": "10.11.0.101",
+        "gui_enabled": false
+    },
+    {
+        "vname": "masternode-2-k3s",
+        "hostname": "masternode-2",
+        "device_description": "Backup für Main Server  Produktion Halle 1",
+        "tags": ["bk, halle1, main, linie1"],
+        "mem": 2048,
+        "cpu": 2,
+        "ip": "10.11.0.102",
+        "gui_enabled": false
+    }
+]
