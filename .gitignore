@@ -1,6 +1,7 @@
 .vagrant
 .env
 *.log
-tmp/*
+tmp/*.txt
+tmp/*.conf
 GitOps/webserver_demo/node_modules
 GitOps/github_repo_ssh.secret.yaml
