@@ -3,5 +3,6 @@
 *.log
 tmp/*.txt
 tmp/*.conf
+manifests/*.yaml
 GitOps/webserver_demo/node_modules
 GitOps/github_repo_ssh.secret.yaml
