@@ -1,0 +1,9 @@
+In /scripts dir, all shell scripts to automatically apply necessary manifests and configurations to add extra functionality to the cluster are stored.
+These scripts are not part of the provisioning phase and have to be executed after the first boot manually if the respective function is needed.
+All scripts are built to be be executed as root user -> ```$ sudo su``` and are applied with ```$ sh *.sh```.
+
+| **file**               | **description**                                                                                                                                                                        | **exec**  | **expose**                                                    |
+|------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------|---------------------------------------------------------------|
+| setup_argo_cd.sh       | - Enables ArgoCD continuous deployment framework<br>- Enables ArgoCD dashboard<br>- Exposes ArgoCD dashboard via ingress<br>- Generates an initial password and stores it in /tmp      | root user | ing:<br>https://argocd.<domain-prefix of .env>                |
+| setup_k8s_dashboard.sh | - Enables the basic Kubernetes dashboard<br>- Setup RBAC<br>- Setup ServiceAccount<br>- Exposes Kubernetes dashboard via ingress<br>- Generates the access token and stores it in /tmp | root user | ing: <br>https://kubernetes-dashboard.<domain-prefix of .env> |
+| setup_portainer.sh     | - Enables Portainer<br>- Setup RBAC<br>- Setup ServiceAccount<br>- Setup PVC<br>- Exposes Portainer via ingress                                                                        | root user | ing:<br>https://portainer.<domain-prefix of .env>             |
