@@ -63,9 +63,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION = "2") do |config|
 			end
 			
 			# --- Scripts: Cluster / VM provisioning
-			if master_node_definition[master-1]["gui_enabled"] then node.vm.provision "shell", path: "cluster_bootstrap/setup_xfce_gui.sh" end
-			node.vm.provision "shell", path: "cluster_bootstrap/setup_base.sh", args: ["master"]
-      		node.vm.provision "shell", path: "cluster_bootstrap/setup_k3s.sh", args: [
+			if master_node_definition[master-1]["gui_enabled"] then node.vm.provision "shell", path: "bootstrap/setup_xfce_gui.sh" end
+			node.vm.provision "shell", path: "bootstrap/setup_base.sh", args: ["master"]
+      		node.vm.provision "shell", path: "bootstrap/setup_k3s.sh", args: [
 				    "master",
         		master == 1 ? "init" : "join",
         		K3S_CHANNEL,
@@ -107,9 +107,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION = "2") do |config|
 			end
 			
 			# --- Scripts: Cluster / VM provisioning
-			if worker_node_definition[worker-1]["gui_enabled"] then node.vm.provision "shell", path: "cluster_bootstrap/setup_xfce_gui.sh" end
-			node.vm.provision "shell", path: "cluster_bootstrap/setup_base.sh", args: ["worker"]
-      		node.vm.provision "shell", path: "cluster_bootstrap/setup_k3s.sh", args: [
+			if worker_node_definition[worker-1]["gui_enabled"] then node.vm.provision "shell", path: "bootstrap/setup_xfce_gui.sh" end
+			node.vm.provision "shell", path: "bootstrap/setup_base.sh", args: ["worker"]
+      		node.vm.provision "shell", path: "bootstrap/setup_k3s.sh", args: [
         		"worker",
 				    "join",
         		K3S_CHANNEL,
