@@ -1,11 +1,11 @@
 [
     {
-        "vname": "LOADBALANCER",
-        "hostname": "loadbalancer",
+        "vname": "rancherserver-1",
+        "hostname": "rancherserver-1",
         "device_id": "XYUjadcLoop",
-        "device_description": "Loadbalancer",
-        "tags": ["lb"],
-        "mem": 2048,
+        "device_description": "rancher",
+        "tags": ["r"],
+        "mem": 3072,
         "cpu": 2,
         "ip": "10.11.0.100",
         "gui_enabled": false
