@@ -28,7 +28,7 @@ elif [ $MODE == "join" ]; then
     k3s_mode="--server https://$MAIN_MASTER_HOSTNAME.$DOMAIN:6443"
     echo k3s_mode
 else 
-    echo "Error: Wrong args passed for ./bootstrap/setup_k3s.sh !"
+    echo "Error: Wrong args passed for ./k3s_edgecluster_bootstrap/setup_k3s.sh !"
     exit 1
 fi
 
@@ -76,5 +76,5 @@ curl -sfL https://raw.githubusercontent.com/k3s-io/k3s/$K3S_VERSION/install.sh \
         --flannel-iface 'eth1'
         
 else
-echo "Error: Wrong arguments passed for ./bootstrap/setup_k3s.sh !"
+echo "Error: Wrong arguments passed for ./k3s_edgecluster_bootstrap/setup_k3s.sh !"
 fi
