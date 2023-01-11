@@ -1,4 +1,5 @@
-In /bootstrap dir, all shell scripts are stored which are automatically executed in Vagrants' VM provisioning phase.
+In /k3s_edgecluster_bootstrap dir, all shell scripts are stored which are automatically executed in Vagrants' VM provisioning phase.
+These scripts are only applied on Masters and Workers (Edge Nodes) of the K3s Edge-Cluster and not on further machines like Rancher server(s), LB, ...
 They are called in Vagrantfile and should not be executed after provisioning.
 
 | **file**        | **description**                                                                                                                                                                                                                                                                                                | **exec**       |
