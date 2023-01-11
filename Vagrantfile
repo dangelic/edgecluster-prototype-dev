@@ -7,14 +7,18 @@ ENV["VAGRANT_NO_PARALLEL"] = "yes"
 
 require "json"
 
-# Define the machines (n-master and n-worker (edge-nodes) in ./vm_config/*_node_config.json)
+# Define the machines (n-master and n-worker (edge-nodes) in ./vm_config/*_node.config.json)
 
 # Note: High-Availability-Cluster (HA) with multiple masters are possible
 # Note: Specify the IP-realm in config to not be in collision!
-master_node_definition = JSON.parse(File.read("./vm_config/master_node_config.json"))
+master_node_definition = JSON.parse(File.read("./vm_config/master_node.config.json"))
 num_master_nodes = master_node_definition.size
-worker_node_definition = JSON.parse(File.read("./vm_config/worker_node_config.json"))
+worker_node_definition = JSON.parse(File.read("./vm_config/worker_node.config.json"))
 num_worker_nodes = worker_node_definition.size
+
+# Define 1...n Rancher server(s) in ./vm_config/rancher_server_config.json
+rancher_server_definition = JSON.parse(File.read("./vm_config/rancher_server.config.json"))
+num_rancher_server = rancher_server_definition.size
 
 Vagrant.configure(VAGRANTFILE_API_VERSION = "2") do |config|
 
@@ -40,7 +44,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION = "2") do |config|
 			node.vm.box = VM_OS
 			node.vm.hostname = "#{master_node_definition[master-1]["hostname"]}.#{DOMAIN}" # FQDN
 			node.vm.network :private_network, ip: master_node_definition[master-1]["ip"]
-			node.vm.network :forwarded_port, guest: 8001, host: 8001+master-1 # k8s-API
+			# node.vm.network :forwarded_port, guest: 8001, host: 8001+master-1 # k8s-API
 
 			# --- Setup dir sync only for masters
 			node.vm.provision "file", source: "scripts", destination: "$HOME/scripts" # Scripts to apply additional services, ingresses, rbac, service accounts, ...
@@ -63,9 +67,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION = "2") do |config|
 			end
 			
 			# --- Scripts: Cluster / VM provisioning
-			if master_node_definition[master-1]["gui_enabled"] then node.vm.provision "shell", path: "bootstrap/setup_xfce_gui.sh" end
-			node.vm.provision "shell", path: "bootstrap/setup_base.sh", args: ["master"]
-      		node.vm.provision "shell", path: "bootstrap/setup_k3s.sh", args: [
+			# if master_node_definition[master-1]["gui_enabled"] then node.vm.provision "shell", path: "k3s_edgecluster_bootstrap/setup_xfce_gui.sh" end
+			node.vm.provision "shell", path: "k3s_edgecluster_bootstrap/setup_base.sh", args: ["master"]
+      		node.vm.provision "shell", path: "k3s_edgecluster_bootstrap/setup_k3s.sh", args: [
 				    "master",
         		master == 1 ? "init" : "join",
         		K3S_CHANNEL,
@@ -107,9 +111,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION = "2") do |config|
 			end
 			
 			# --- Scripts: Cluster / VM provisioning
-			if worker_node_definition[worker-1]["gui_enabled"] then node.vm.provision "shell", path: "bootstrap/setup_xfce_gui.sh" end
-			node.vm.provision "shell", path: "bootstrap/setup_base.sh", args: ["worker"]
-      		node.vm.provision "shell", path: "bootstrap/setup_k3s.sh", args: [
+			# if worker_node_definition[worker-1]["gui_enabled"] then node.vm.provision "shell", path: "k3s_edgecluster_bootstrap/setup_xfce_gui.sh" end
+			node.vm.provision "shell", path: "k3s_edgecluster_bootstrap/setup_base.sh", args: ["worker"]
+      		node.vm.provision "shell", path: "k3s_edgecluster_bootstrap/setup_k3s.sh", args: [
         		"worker",
 				    "join",
         		K3S_CHANNEL,
@@ -120,6 +124,37 @@ Vagrant.configure(VAGRANTFILE_API_VERSION = "2") do |config|
 				    MAIN_MASTER_HOSTNAME,
 				    worker_node_definition[worker-1]["ip"]
       		]
+			
+			node.vm.provision :shell, :inline => <<-SCRIPT 
+			neofetch 
+			SCRIPT
+		end
+	end
+
+	# --- Provisions the machine which serves as Rancher server
+	(1..num_rancher_server).each do |rancher|
+		config.vm.define "#{rancher_server_definition[rancher-1]["vname"]}" do |node|
+			node.vm.box = VM_OS
+			node.vm.hostname = "#{rancher_server_definition[rancher-1]["hostname"]}.#{DOMAIN}" # FQDN
+			node.vm.network :private_network, ip: rancher_server_definition[rancher-1]["ip"]
+			# Forwards ports on 8080 of every guest (Rancher server 1...n) to 9080, 9081 on host, ... matching Rancher Server 1, 2, ...
+			node.vm.network :forwarded_port, guest: 8080, host: 9080+rancher-1 # k8s-API
+			node.vm.provider "virtualbox" do |v|
+				# v.linked_clone = true # Reduce provision overhead
+				v.name = "#{rancher_server_definition[rancher-1]["hostname"]}#{VM_ALIAS_SUFFIX}"
+				v.memory = rancher_server_definition[rancher-1]["mem"]
+				v.cpus = rancher_server_definition[rancher-1]["cpu"]
+				v.gui = rancher_server_definition[rancher-1]["gui_enabled"]
+			end
+
+			node.vm.provision "hosts" do |hosts|
+				hosts.autoconfigure = true
+				hosts.sync_hosts = true
+				hosts.add_localhost_hostnames = false
+			end
+			
+			# --- Scripts: Server / VM provisioning
+			node.vm.provision "shell", path: "rancher_server_bootstrap/setup_base.sh", args: ["worker"]
 			
 			node.vm.provision :shell, :inline => <<-SCRIPT 
 			neofetch 
