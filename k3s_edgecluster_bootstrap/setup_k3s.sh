@@ -3,7 +3,7 @@
 set -euxo pipefail
 
 echo "######################################################################################"
-echo "Run script: ./bootstrap/setup_k3s.sh --- This sets up the K3s cluster environment"
+echo "Set up the K3s cluster environment"
 echo "######################################################################################"
 
 SERVER_KIND="$1"; shift

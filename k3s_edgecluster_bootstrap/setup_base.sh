@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "############################################################################"
-echo "Run script: ./bootstrap/setup_base.sh --- This installs basic tools"
+echo "Install basic tools"
 echo "############################################################################"
 
 
