@@ -1,0 +1,13 @@
+[
+    {
+        "vname": "LOADBALANCER",
+        "hostname": "loadbalancer",
+        "device_id": "XYUjadcLoop",
+        "device_description": "Loadbalancer",
+        "tags": ["lb"],
+        "mem": 2048,
+        "cpu": 2,
+        "ip": "10.11.0.100",
+        "gui_enabled": false
+    }
+]
