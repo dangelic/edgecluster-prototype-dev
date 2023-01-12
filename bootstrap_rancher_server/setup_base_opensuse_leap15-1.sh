@@ -1,5 +1,5 @@
 echo "############################################################################"
-echo "Install basic tools for Rancher server. --- OS: openSUSE LEAP 15.1 ---"
+echo "Install basic tools for Rancher server --- OS: openSUSE LEAP 15.1 ---"
 echo "############################################################################"
 
 sudo zypper --non-interactive ref
