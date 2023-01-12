@@ -1,0 +1,1 @@
+In ./assets dir, all relevant assets like images, ... for documentation / README.md are stored.
