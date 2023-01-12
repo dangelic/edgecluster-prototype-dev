@@ -27,13 +27,15 @@ Vagrant.configure(VAGRANTFILE_API_VERSION = "2") do |config|
 	config.env.enable # Enable vagrant-env(./.env)
 
 	# --- ENVs to be set in .env (required)
-	VM_OS 			= ENV["VM_OS"]
-	K3S_CHANNEL 	= ENV["K3S_CHANNEL"]
-	K3S_VERSION 	= ENV["K3S_VERSION"]
-	K3S_TOKEN 		= ENV["K3S_TOKEN"]
-	FLANNEL_BACKEND = ENV["FLANNEL_BACKEND"]
-	DOMAIN			= ENV["DOMAIN"]
-	VM_ALIAS_SUFFIX	= ENV["NAMING_SUFFIX"]
+	VM_OS 					= ENV["VM_OS"]
+	K3S_CHANNEL 			= ENV["K3S_CHANNEL"]
+	K3S_VERSION 			= ENV["K3S_VERSION"]
+	K3S_TOKEN 				= ENV["K3S_TOKEN"]
+	FLANNEL_BACKEND 		= ENV["FLANNEL_BACKEND"]
+	DOMAIN					= ENV["DOMAIN"]
+	VM_ALIAS_SUFFIX			= ENV["NAMING_SUFFIX"]
+	METALLB_CHART_VERSION	= ENV["METALLB_CHART_VERSION"]
+	LB_IP_RANGE				= ENV["LB_IP_RANGE"]
 
 	MAIN_MASTER_HOSTNAME = master_node_definition[0]["hostname"]
 
@@ -80,6 +82,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION = "2") do |config|
 				    MAIN_MASTER_HOSTNAME,
 				    master_node_definition[master-1]["ip"]
       		]
+
+			# Metallb as LoadBalancer
+			if master == 1 then node.vm.provision "shell", path: "k3s_edgecluster_bootstrap/setup_metallb.sh", args: [METALLB_CHART_VERSION, LB_IP_RANGE] end
 
 			# --- Additional deployments
 			#

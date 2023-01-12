@@ -47,6 +47,7 @@ curl -sfL https://raw.githubusercontent.com/k3s-io/k3s/$K3S_VERSION/install.sh \
             --cluster-domain 'cluster.local' \
             --flannel-iface 'eth1' \
             --flannel-backend $FLANNEL_BACKEND \
+            --disable servicelb \
             $k3s_mode
 
 # BOOTSTRAP: Waiting for the node to be ready...
