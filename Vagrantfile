@@ -68,8 +68,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION = "2") do |config|
 			end
 			
 			# --- Scripts: Server / VM provisioning
-			node.vm.provision "shell", path: "rancher_server_bootstrap/setup_base_opensuse_leap15-1.sh"
-			node.vm.provision "shell", path: "rancher_server_bootstrap/setup_rancher_2.sh"
+			node.vm.provision "shell", path: "bootstrap_rancher_server/setup_base_opensuse_leap15-1.sh"
+			node.vm.provision "shell", path: "bootstrap_rancher_server/setup_rancher_2.sh"
 			
 			node.vm.provision :shell, :inline => <<-SCRIPT 
 			neofetch 
@@ -108,9 +108,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION = "2") do |config|
 			# --- Scripts: Cluster / VM provisioning
 
 			# TODO: tbd. GUI
-			# if master_node_definition[master-1]["gui_enabled"] then node.vm.provision "shell", path: "k3s_edgecluster_bootstrap/setup_xfce_gui.sh" end
-			node.vm.provision "shell", path: "k3s_edgecluster_bootstrap/setup_base.sh", args: ["master"]
-      		node.vm.provision "shell", path: "k3s_edgecluster_bootstrap/setup_k3s.sh", args: [
+			# if master_node_definition[master-1]["gui_enabled"] then node.vm.provision "shell", path: "bootstrap_edgecluster_k3s/setup_xfce_gui.sh" end
+			node.vm.provision "shell", path: "bootstrap_edgecluster_k3s/setup_base.sh", args: ["master"]
+      		node.vm.provision "shell", path: "bootstrap_edgecluster_k3s/setup_k3s.sh", args: [
 				    "master",
         		master == 1 ? "init" : "join",
         		K3S_CHANNEL,
@@ -123,7 +123,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION = "2") do |config|
       		]
 
 			# Metallb as LoadBalancer
-			if master == 1 then node.vm.provision "shell", path: "k3s_edgecluster_bootstrap/setup_metallb.sh", args: [METALLB_CHART_VERSION, LB_IP_RANGE] end
+			if master == 1 then node.vm.provision "shell", path: "bootstrap_edgecluster_k3s/setup_metallb.sh", args: [METALLB_CHART_VERSION, LB_IP_RANGE] end
 
 			node.vm.provision :shell, :inline => <<-SCRIPT 
 			neofetch 
@@ -152,9 +152,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION = "2") do |config|
 			end
 			
 			# --- Scripts: Cluster / VM provisioning
-			# if worker_node_definition[worker-1]["gui_enabled"] then node.vm.provision "shell", path: "k3s_edgecluster_bootstrap/setup_xfce_gui.sh" end
-			node.vm.provision "shell", path: "k3s_edgecluster_bootstrap/setup_base.sh", args: ["worker"]
-      		node.vm.provision "shell", path: "k3s_edgecluster_bootstrap/setup_k3s.sh", args: [
+			# if worker_node_definition[worker-1]["gui_enabled"] then node.vm.provision "shell", path: "bootstrap_edgecluster_k3s/setup_xfce_gui.sh" end
+			node.vm.provision "shell", path: "bootstrap_edgecluster_k3s/setup_base.sh", args: ["worker"]
+      		node.vm.provision "shell", path: "bootstrap_edgecluster_k3s/setup_k3s.sh", args: [
         		"worker",
 				    "join",
         		K3S_CHANNEL,
