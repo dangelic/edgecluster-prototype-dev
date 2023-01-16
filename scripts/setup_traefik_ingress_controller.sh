@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "###########################################################################"
-echo "Setup Traefik as the clusters' load balancer"
+echo "Setup Traefik as the clusters' Ingress controller"
 echo "###########################################################################"
 
 HOME_V="/home/vagrant"
