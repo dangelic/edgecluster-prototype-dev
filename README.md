@@ -87,16 +87,16 @@ Placeholder...
 
 ## Open-Source Tech-Stack
 
-- [**Argo CD --latest:stable** by Argo Project](https://argo-cd.readthedocs.io/en/stable/) - *As GitOps-enabler* - A declarative, GitOps continuous delivery tool for Kubernetes.
+- [**Argo CD v2.3.3** by Argo Project](https://argo-cd.readthedocs.io/en/stable/) - *As GitOps-enabler* - A declarative, GitOps continuous delivery tool for Kubernetes.
 - [**Grafana --latest:stable** by Grafana Labs](https://grafana.com/) -*As data visualization dashboard* - Grafana is a data visualization and monitoring platform that allows users to create and share interactive, customizable dashboards for monitoring and analyzing time-series data from various data sources.
 - [**Helm --latest:stable** by the Helm Authors](https://helm.sh/) - *As the clusters' Package Manager* - Helm is a package manager for Kubernetes that helps to simplify the installation, configuration and management of Kubernetes applications using easy to use, reusable charts.
-- [**K3s 1.25.2** by Rancher](https://k3s.io/) - *As Kubernetes Distribution* - K3s is a lightweight Kubernetes distribution, designed for easy deployment and management of small to medium-sized clusters. It is intended for use in resource-constrained environments such as edge computing and IoT.
+- [**K3s v1.25.2** by Rancher](https://k3s.io/) - *As Kubernetes Distribution* - K3s is a lightweight Kubernetes distribution, designed for easy deployment and management of small to medium-sized clusters. It is intended for use in resource-constrained environments such as edge computing and IoT.
 - [**MetalLB --latest:stable** by the MetalLB Contributers](https://metallb.universe.tf/) - *As the clusters' Load Balancer* - MetalLB is a load-balancer implementation for bare metal Kubernetes clusters that operates at Layer 2, allowing to expose services on a cluster using standard protocols such as BGP or ARP.
 - [**Prometheus --latest:stable** by the Prometheus Authors](https://prometheus.io/docs/prometheus/latest/configuration/configuration/) - *As the cluster monitoring solution* - Prometheus is a Kubernetes native monitoring tool that allows to collect and query time-series data from pods, nodes and other Kubernetes objects and alert on defined conditions.
-- [**Rancher 2.7** by SUSE](https://www.suse.com/c/rancher_blog/whats-new-in-rancher-2-7/) - *As Cluster Management server* - Rancher is a container orchestration platform that provides a simple and user-friendly way to deploy and manage Kubernetes clusters.
+- [**Rancher v2.7** by SUSE](https://www.suse.com/c/rancher_blog/whats-new-in-rancher-2-7/) - *As Cluster Management server* - Rancher is a container orchestration platform that provides a simple and user-friendly way to deploy and manage Kubernetes clusters.
 - [**Traefik <latest>** by traefiklabs](https://traefik.io/traefik/) - *As the clusters' Ingress controller* - Traefik is a modern, dynamic Ingress controller that routes incoming traffic to the correct service based on its configuration and the label on the service, acting as a reverse proxy and load balancer for microservices at Layer 7 of the OSI Model.
-- [**Vagrant 2.3.4** by HashiCorp](https://www.vagrantup.com/) - *As VM provisioner* - Vagrant is a tool for building and managing virtual machine environments, allowing developers to create and configure reproducible development environments via hypervisors like VirtualBox.
-- [**VirtualBox 6.1** by Oracle](https://www.virtualbox.org/) - *As hypervisor* - Oracle VirtualBox is a free and open-source hypervisor software that allows users to run multiple operating systems on a single physical machine.
+- [**Vagrant v2.3.4** by HashiCorp](https://www.vagrantup.com/) - *As VM provisioner* - Vagrant is a tool for building and managing virtual machine environments, allowing developers to create and configure reproducible development environments via hypervisors like VirtualBox.
+- [**VirtualBox v6.1** by Oracle](https://www.virtualbox.org/) - *As hypervisor* - Oracle VirtualBox is a free and open-source hypervisor software that allows users to run multiple operating systems on a single physical machine.
 ## Author
 
 - Leonardo d'Angelico - GitHub: [@dangelic](https://www.github.com/dangelic)
