@@ -6,6 +6,9 @@ echo "##########################################################################
 
 HOME_V="/home/vagrant"
 
+RANCHER_VERSION="$1" shift;
+echo $RANCHER_VERSION
+
 sudo docker pull rancher/rancher:latest
 
 # TLS Port: 8080 is VM, 443 is Container. 8080 will be forwarded to Host-Sytem on 9090, 9091, ...
@@ -14,24 +17,24 @@ sudo docker pull rancher/rancher:latest
 sudo docker run -d --restart=unless-stopped \
   -p 80:80 -p 8080:443 \
   --privileged \
-  rancher/rancher:latest
+  rancher/rancher:$RANCHER_VERSION
 
-echo "Waiting for Rancher curl to return status code 200..."
+echo "Grep bootstrap Rancher password once it appears in Docker logs - save it in tmp dir afterwards"
+process=$(docker ps -a --filter ancestor=rancher/rancher:$RANCHER_VERSION --format "{{.ID}}")
 while true; do
-    status_code=$(curl -s -o /dev/null -w "%{http_code}" https://localhost:8080)
-    if [ $status_code -eq 400 ]; then
-        printf "\nstatus code is 400 so the server started...\n"
-        break
-    else
-        printf "\nstatus code is $status_code\n"
-    fi
-    echo "sleep 5 secs.."
+  bootstrap_password_rancher=$(sudo docker logs  $process   2>&1 | grep "Bootstrap Password:")
+  # Check if the output is empty
+  if [ -z "$bootstrap_password_rancher" ]; then
+    echo "Grep returned nothing, wait 5 seconds and continuing loop..."
     sleep 5
+  else
+    echo bootstrap_password_rancher > $HOME_V/tmp/rancherserver_initial_password.txt
+    echo "Initial password for user Rancher Server :::::\n\n\n$(cat $HOME_V/tmp/rancherserver_initial_password.txt)\n\n\n"
+    break
+  fi
 done
 
-# Get bootstrap Rancher password which will be replaced in first - save it in tmp dir
-process=$(docker ps -a --filter ancestor=rancher/rancher:latest --format "{{.ID}}")
-bootstrap_password_rancher=$(sudo docker logs  $process   2>&1 | grep "Bootstrap Password:")
-echo bootstrap_password_rancher > $HOME_V/tmp/rancherserver_initial_password.txt
-echo "Initial password for user Rancher Server :::::\n\n\n$(cat $HOME_V/tmp/rancherserver_initial_password.txt)\n\n\n"
+
+
+
 
