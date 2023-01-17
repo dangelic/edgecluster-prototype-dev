@@ -4,11 +4,9 @@ echo "##########################################################################
 echo "Set up Rancher 2 server via Docker"
 echo "############################################################################"
 
-HOME_V="/home/vagrant"
+RANCHER_VERSION=$1
 
-# TODO: Fix arg-pass bug
-# RANCHER_VERSION=$1
-RANCHER_VERSION="v2.7.0"
+HOME_V="/home/vagrant"
 
 sudo docker pull rancher/rancher:$RANCHER_VERSION
 
