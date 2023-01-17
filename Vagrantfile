@@ -71,10 +71,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION = "2") do |config|
 			# --- Scripts: Server / VM provisioning
 			node.vm.provision "shell", path: "bootstrap_rancher_server/setup_base_opensuse_leap15-1.sh"
 			node.vm.provision "shell", path: "bootstrap_rancher_server/setup_rancher_2.sh", args: [RANCHER_VERSION]
-			
-			node.vm.provision :shell, :inline => <<-SCRIPT 
-			neofetch 
-			SCRIPT
 		end
 	end
 
@@ -125,10 +121,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION = "2") do |config|
 
 			# Metallb as LoadBalancer
 			if master == 1 then node.vm.provision "shell", path: "bootstrap_edgecluster_k3s/setup_metallb.sh", args: [METALLB_CHART_VERSION, LB_IP_RANGE] end
-
-			node.vm.provision :shell, :inline => <<-SCRIPT 
-			neofetch 
-			SCRIPT
 		end
 	end
 	
@@ -166,10 +158,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION = "2") do |config|
 				    MAIN_MASTER_HOSTNAME,
 				    worker_node_definition[worker-1]["ip"]
       		]
-			
-			node.vm.provision :shell, :inline => <<-SCRIPT 
-			neofetch 
-			SCRIPT
 		end
 	end
 end
