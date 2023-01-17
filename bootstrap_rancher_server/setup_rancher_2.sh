@@ -6,10 +6,11 @@ echo "##########################################################################
 
 HOME_V="/home/vagrant"
 
-RANCHER_VERSION="$1" shift;
-echo $RANCHER_VERSION
+# TODO: Fix arg-pass bug
+# RANCHER_VERSION=$1
+RANCHER_VERSION="v2.7.0"
 
-sudo docker pull rancher/rancher:latest
+sudo docker pull rancher/rancher:$RANCHER_VERSION
 
 # TLS Port: 8080 is VM, 443 is Container. 8080 will be forwarded to Host-Sytem on 9090, 9091, ...
 # Forward-Chain: Container:443->VM:8080->Host:9090
@@ -28,8 +29,8 @@ while true; do
     echo "Grep returned nothing, wait 5 seconds and continuing loop..."
     sleep 5
   else
-    echo bootstrap_password_rancher > $HOME_V/tmp/rancherserver_initial_password.txt
-    echo "Initial password for user Rancher Server :::::\n\n\n$(cat $HOME_V/tmp/rancherserver_initial_password.txt)\n\n\n"
+    echo $bootstrap_password_rancher > $HOME_V/tmp/rancherserver_initial_password.txt
+    echo "Initial password for Rancher Server :::::\n\n\n$(cat $HOME_V/tmp/rancherserver_initial_password.txt)\n\n\n"
     break
   fi
 done
