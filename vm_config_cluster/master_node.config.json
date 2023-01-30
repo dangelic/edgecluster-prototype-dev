@@ -1,0 +1,13 @@
+[
+    {
+        "vname": "masternode-cloudcore",
+        "hostname": "masternode-cloudcore",
+        "device_id": "290jdncQxor",
+        "device_description": "CLoudcore / Main Master Server Produktionsfeld A",
+        "tags": ["core", "A", "main"],
+        "mem": 4096,
+        "cpu": 4,
+        "ip": "192.168.0.101",
+        "gui_enabled": false
+    }
+]

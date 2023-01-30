@@ -1,25 +1,24 @@
 [
     {
-        "vname": "edgenode-1-k3s",
-        "hostname": "edgenode-1",
+        "vname": "workernode-1-edge",
+        "hostname": "workernode-1-edge",
         "device_id": "cpmsaj211ss",
         "device_description": "Edge: Raspberry Pi für Produktionsfeld A",
         "tags": ["edge","Pi","A", "sensor_type=2"],
         "mem": 2048,
         "cpu": 2,
-        "ip": "10.11.0.201",
+        "ip": "192.168.0.201",
         "gui_enabled": false
     },
-
     {
-        "vname": "edgenode-2-k3s",
-        "hostname": "edgenode-2",
+        "vname": "workernode-2-edge",
+        "hostname": "workernode-2-edge",
         "device_id": "qd787YYaXs1",
-        "device_description": "Edge: Raspberry für Produktionsfeld A",
+        "device_description": "Edge: Raspberry Pi für Produktionsfeld A",
         "tags": ["edge","Pi","A", "sensor_type=1"],
         "mem": 2048,
         "cpu": 2,
-        "ip": "10.11.0.202",
+        "ip": "192.168.0.202",
         "gui_enabled": false
     }
 ]

@@ -8,16 +8,16 @@ ENV["VAGRANT_NO_PARALLEL"] = "yes"
 
 require "json"
 
-# Define the machines (1...n Rancher server(s), 1...n Master(s) and 1...n Worker(s) (Edge-Node(s)) in ./vm_config/*.config.json)
+# Define the machines (1...n Rancher server(s), 1...n Master(s) and 1...n Worker(s) (Edge-Node(s)) in ./vm_config_k3s/*.config.json)
 
 # Note: High-Availability-Cluster (HA) with multiple masters are possible
 # Note: HA Rancher setup tbd.
 # Note: Specify the IP-realm in config to not be in collision! Mind .env IP-Range for Load Balancing
-master_node_definition = JSON.parse(File.read("./vm_config/master_node.config.json"))
+master_node_definition = JSON.parse(File.read("./vm_config_k3s/master_node.config.json"))
 num_master_nodes = master_node_definition.size
-worker_node_definition = JSON.parse(File.read("./vm_config/worker_node.config.json"))
+worker_node_definition = JSON.parse(File.read("./vm_config_k3s/worker_node.config.json"))
 num_worker_nodes = worker_node_definition.size
-rancher_server_definition = JSON.parse(File.read("./vm_config/rancher_server.config.json"))
+rancher_server_definition = JSON.parse(File.read("./vm_config_k3s/rancher_server.config.json"))
 num_rancher_server = rancher_server_definition.size
 
 Vagrant.configure(VAGRANTFILE_API_VERSION = "2") do |config|
@@ -41,6 +41,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION = "2") do |config|
 	RANCHER_VERSION			= ENV["RANCHER_VERSION"]
 
 	MAIN_MASTER_HOSTNAME = master_node_definition[0]["hostname"]
+
+	# Scripts to run post-provisioning phase on host system
+	# config.vm.provision "shell", path: "scripts_post_provision/setup_ssh.sh", run: "once"
 
 	# --- Provisions 1...n Rancher server(s)
 	(1..num_rancher_server).each do |rancher|
@@ -70,7 +73,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION = "2") do |config|
 			
 			# --- Scripts: Server / VM provisioning
 			node.vm.provision "shell", path: "bootstrap_rancher_server/setup_base_opensuse_leap15-1.sh"
-			node.vm.provision "shell", path: "bootstrap_rancher_server/setup_rancher_2.sh", args: [RANCHER_VERSION]
+			# node.vm.provision "shell", path: "bootstrap_rancher_server/setup_rancher_2.sh", args: [RANCHER_VERSION]
 		end
 	end
 

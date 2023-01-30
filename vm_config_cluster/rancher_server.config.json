@@ -1,13 +1,13 @@
 [
     {
-        "vname": "rancherserver-1",
-        "hostname": "rancherserver-1",
+        "vname": "rancherserver",
+        "hostname": "rancherserver",
         "device_id": "XYUjadcLoop",
         "device_description": "rancher",
         "tags": ["r"],
         "mem": 3072,
         "cpu": 2,
-        "ip": "10.11.0.100",
+        "ip": "192.168.0.100",
         "gui_enabled": false
     }
 ]
