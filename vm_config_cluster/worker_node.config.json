@@ -7,7 +7,7 @@
         "tags": ["edge","Pi","A", "sensor_type=2"],
         "mem": 2048,
         "cpu": 2,
-        "ip": "192.168.0.201",
+        "ip": "10.11.0.201",
         "gui_enabled": false
     },
     {
@@ -18,7 +18,7 @@
         "tags": ["edge","Pi","A", "sensor_type=1"],
         "mem": 2048,
         "cpu": 2,
-        "ip": "192.168.0.202",
+        "ip": "10.11.0.202",
         "gui_enabled": false
     }
 ]

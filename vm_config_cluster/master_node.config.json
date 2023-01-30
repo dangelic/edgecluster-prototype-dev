@@ -7,7 +7,7 @@
         "tags": ["core", "A", "main"],
         "mem": 4096,
         "cpu": 4,
-        "ip": "192.168.0.101",
+        "ip": "10.11.0.101",
         "gui_enabled": false
     }
 ]
