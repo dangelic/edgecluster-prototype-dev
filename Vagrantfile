@@ -8,16 +8,16 @@ ENV["VAGRANT_NO_PARALLEL"] = "yes"
 
 require "json"
 
-# Define the machines (1...n Rancher server(s), 1...n Master(s) and 1...n Worker(s) (Edge-Node(s)) in ./vm_config_k3s/*.config.json)
+# Define the machines (1...n Rancher server(s), 1...n Master(s) and 1...n Worker(s) (Edge-Node(s)) in ./vm_config_cluster/*.config.json)
 
 # Note: High-Availability-Cluster (HA) with multiple masters are possible
 # Note: HA Rancher setup tbd.
 # Note: Specify the IP-realm in config to not be in collision! Mind .env IP-Range for Load Balancing
-master_node_definition = JSON.parse(File.read("./vm_config_k3s/master_node.config.json"))
+master_node_definition = JSON.parse(File.read("./vm_config_cluster/master_node.config.json"))
 num_master_nodes = master_node_definition.size
-worker_node_definition = JSON.parse(File.read("./vm_config_k3s/worker_node.config.json"))
+worker_node_definition = JSON.parse(File.read("./vm_config_cluster/worker_node.config.json"))
 num_worker_nodes = worker_node_definition.size
-rancher_server_definition = JSON.parse(File.read("./vm_config_k3s/rancher_server.config.json"))
+rancher_server_definition = JSON.parse(File.read("./vm_config_cluster/rancher_server.config.json"))
 num_rancher_server = rancher_server_definition.size
 
 Vagrant.configure(VAGRANTFILE_API_VERSION = "2") do |config|
@@ -38,6 +38,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION = "2") do |config|
 	VM_ALIAS_SUFFIX			= ENV["NAMING_SUFFIX"]
 	METALLB_CHART_VERSION	= ENV["METALLB_CHART_VERSION"]
 	LB_IP_RANGE				= ENV["LB_IP_RANGE"]
+	RANCHER_ENABLED			= ENV["RANCHER_VERSION"]
 	RANCHER_VERSION			= ENV["RANCHER_VERSION"]
 
 	MAIN_MASTER_HOSTNAME = master_node_definition[0]["hostname"]
@@ -46,34 +47,37 @@ Vagrant.configure(VAGRANTFILE_API_VERSION = "2") do |config|
 	# config.vm.provision "shell", path: "scripts_post_provision/setup_ssh.sh", run: "once"
 
 	# --- Provisions 1...n Rancher server(s)
-	(1..num_rancher_server).each do |rancher|
-		config.vm.define "#{rancher_server_definition[rancher-1]["vname"]}" do |node|
-			node.vm.box = VM_BOX_OS_RANCHERSERVER
-			node.vm.hostname = "#{rancher_server_definition[rancher-1]["hostname"]}.#{DOMAIN}" # FQDN
-			node.vm.network :private_network, ip: rancher_server_definition[rancher-1]["ip"]
-			# Forwards port 8080 of every VM (Rancher server 1...n) to 9090, 9091 on host, ... matching Rancher server 1, 2, ...
-			node.vm.network :forwarded_port, guest: 8080, host: 9090+rancher-1
+	if RANCHER_ENABLED == "true" then
+		end
+		(1..num_rancher_server).each do |rancher|
+			config.vm.define "#{rancher_server_definition[rancher-1]["vname"]}" do |node|
+				node.vm.box = VM_BOX_OS_RANCHERSERVER
+				node.vm.hostname = "#{rancher_server_definition[rancher-1]["hostname"]}.#{DOMAIN}" # FQDN
+				node.vm.network :private_network, ip: rancher_server_definition[rancher-1]["ip"]
+				# Forwards port 8080 of every VM (Rancher server 1...n) to 9090, 9091 on host, ... matching Rancher server 1, 2, ...
+				node.vm.network :forwarded_port, guest: 8080, host: 9090+rancher-1
 
-			# --- Setup dir sync only for Rancher server
-			node.vm.provision "file", source: "tmp", destination: "$HOME/tmp" # Bootstrap secrets
+				# --- Setup dir sync only for Rancher server
+				node.vm.provision "file", source: "tmp", destination: "$HOME/tmp" # Bootstrap secrets
 
-			node.vm.provider "virtualbox" do |v|
-				# v.linked_clone = true # Reduce provision overhead
-				v.name = "#{rancher_server_definition[rancher-1]["hostname"]}#{VM_ALIAS_SUFFIX}"
-				v.memory = rancher_server_definition[rancher-1]["mem"]
-				v.cpus = rancher_server_definition[rancher-1]["cpu"]
-				v.gui = rancher_server_definition[rancher-1]["gui_enabled"]
+				node.vm.provider "virtualbox" do |v|
+					# v.linked_clone = true # Reduce provision overhead
+					v.name = "#{rancher_server_definition[rancher-1]["hostname"]}#{VM_ALIAS_SUFFIX}"
+					v.memory = rancher_server_definition[rancher-1]["mem"]
+					v.cpus = rancher_server_definition[rancher-1]["cpu"]
+					v.gui = rancher_server_definition[rancher-1]["gui_enabled"]
+				end
+
+				node.vm.provision "hosts" do |hosts|
+					hosts.autoconfigure = true
+					hosts.sync_hosts = true
+					hosts.add_localhost_hostnames = false
+				end
+				
+				# --- Scripts: Server / VM provisioning
+				node.vm.provision "shell", path: "bootstrap_rancher_server/setup_base_opensuse_leap15-1.sh"
+				# node.vm.provision "shell", path: "bootstrap_rancher_server/setup_rancher_2.sh", args: [RANCHER_VERSION]
 			end
-
-			node.vm.provision "hosts" do |hosts|
-				hosts.autoconfigure = true
-				hosts.sync_hosts = true
-				hosts.add_localhost_hostnames = false
-			end
-			
-			# --- Scripts: Server / VM provisioning
-			node.vm.provision "shell", path: "bootstrap_rancher_server/setup_base_opensuse_leap15-1.sh"
-			# node.vm.provision "shell", path: "bootstrap_rancher_server/setup_rancher_2.sh", args: [RANCHER_VERSION]
 		end
 	end
 
