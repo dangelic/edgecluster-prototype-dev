@@ -54,7 +54,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION = "2") do |config|
 				node.vm.hostname = "#{rancher_server_definition[rancher-1]["hostname"]}.#{DOMAIN}" # FQDN
 				node.vm.network :private_network, ip: rancher_server_definition[rancher-1]["ip"]
 				# Forwards port 8080 of every VM (Rancher server 1...n) to 9090, 9091 on host, ... matching Rancher server 1, 2, ...
-				node.vm.network :forwarded_port, guest: 8080, host: 9090+rancher-1
+				node.vm.network :forwarded_port, guest: 8080, host: 10080+rancher-1
 
 				# --- Setup dir sync only for Rancher server
 				node.vm.provision "file", source: "tmp", destination: "$HOME/tmp" # Bootstrap secrets
@@ -86,7 +86,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION = "2") do |config|
 			node.vm.box = VM_BOX_OS_MASTER
 			node.vm.hostname = "#{master_node_definition[master-1]["hostname"]}.#{DOMAIN}" # FQDN
 			node.vm.network :private_network, ip: master_node_definition[master-1]["ip"]
-			# node.vm.network :forwarded_port, guest: 8001, host: 8001+master-1 # k8s-API
+			node.vm.network :forwarded_port, guest: 8080, host: 11080+master-1 # k8s-API
 
 			# --- Setup dir sync only for masters
 			node.vm.provision "file", source: "scripts", destination: "$HOME/scripts" # Scripts to apply additional services, ingresses, rbac, service accounts, ...
@@ -136,6 +136,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION = "2") do |config|
 			node.vm.box = VM_BOX_OS_WORKER
 			node.vm.hostname = "#{worker_node_definition[worker-1]["hostname"]}.#{DOMAIN}" # FQDN
 			node.vm.network :private_network, ip: worker_node_definition[worker-1]["ip"]
+			node.vm.network :forwarded_port, guest: 8080, host: 12080+worker-1
 			node.vm.provider "virtualbox" do |v|
 				v.linked_clone = true # Reduce provision overhead
 				v.name = "#{worker_node_definition[worker-1]["hostname"]}#{VM_ALIAS_SUFFIX}"
