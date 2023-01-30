@@ -28,7 +28,7 @@ elif [ $MODE == "join" ]; then
     k3s_mode="--server https://$MAIN_MASTER_HOSTNAME.$DOMAIN:6443"
     echo k3s_mode
 else 
-    echo "Error: Wrong args passed for ./k3s_edgecluster_bootstrap/setup_k3s.sh !"
+    echo "Error: Wrong arguments passed for ./bootstrap_edgecluster_k3s/k3s.setup.sh !"
     exit 1
 fi
 
@@ -50,10 +50,10 @@ curl -sfL https://raw.githubusercontent.com/k3s-io/k3s/$K3S_VERSION/install.sh \
             --disable servicelb \
             $k3s_mode
 
-# BOOTSTRAP: Waiting for the node to be ready...
-$SHELL -c 'node_name=$(hostname); echo "waiting for node $node_name to be ready..."; while [ -z "$(kubectl get nodes $node_name | grep -E "$node_name\s+Ready\s+")" ]; do sleep 3; done; echo "node ready!"'
-# BOOTSTRAP: Waiting for kube-dns pod to be running...
-$SHELL -c 'while [ -z "$(kubectl get pods --selector k8s-app=kube-dns --namespace kube-system | grep -E "\s+Running\s+")" ]; do sleep 3; done'
+# # BOOTSTRAP: Waiting for the node to be ready...
+# $SHELL -c 'node_name=$(hostname); echo "waiting for node $node_name to be ready..."; while [ -z "$(kubectl get nodes $node_name | grep -E "$node_name\s+Ready\s+")" ]; do sleep 3; done; echo "node ready!"'
+# # BOOTSTRAP: Waiting for kube-dns pod to be running...
+# $SHELL -c 'while [ -z "$(kubectl get pods --selector k8s-app=kube-dns --namespace kube-system | grep -E "\s+Running\s+")" ]; do sleep 3; done'
 
 # Symlink
 ln -s /etc/rancher/k3s/k3s.yaml ~/.kube/config
@@ -77,5 +77,6 @@ curl -sfL https://raw.githubusercontent.com/k3s-io/k3s/$K3S_VERSION/install.sh \
         --flannel-iface 'eth1'
         
 else
-echo "Error: Wrong arguments passed for ./k3s_edgecluster_bootstrap/setup_k3s.sh !"
+    echo "Error: Wrong arguments passed for ./bootstrap_edgecluster_k3s/k3s.setup.sh !"
+    exit 1
 fi

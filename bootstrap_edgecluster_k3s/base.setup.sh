@@ -10,11 +10,10 @@ NODE_KIND="$1"; shift
 # To avoid interaction with the terminal
 export DEBIAN_FRONTEND=noninteractive
 
+# --- Common: Executed on every VM
 echo "--> Update package manager..."
 sudo apt-get update
 sudo apt-get upgrade
-
-# --- Common: Executed on every VM
 echo "--> Installing useful tools..."
 sudo apt-get install -y jq
 sudo apt-get install -y curl
@@ -27,10 +26,10 @@ sudo apt-get install -y python3-yaml
 
 # MOTD neofetch as welcome banner for the servers' CLI
 sudo apt-get install -y neofetch
-sudo bash -c $'echo "neofetch" >> /etc/profile.d/mymotd.sh && chmod +x /etc/profile.d/mymotd.sh'
+sudo bash -c $"echo "neofetch" >> /etc/profile.d/mymotd.sh && chmod +x /etc/profile.d/mymotd.sh"
 
 # Master-only
-if [ "$NODE_KIND" == 'master' ]; then
+if [ "$NODE_KIND" == "master" ]; then
     echo "--> Installing Helm..."
     # See: https://helm.sh/docs/intro/install
     curl https://baltocdn.com/helm/signing.asc | gpg --dearmor | sudo tee /usr/share/keyrings/helm.gpg > /dev/null
@@ -41,4 +40,12 @@ if [ "$NODE_KIND" == 'master' ]; then
 
     echo "--> Installing WireGuard..."
     sudo apt-get install -y wireguard
+fi
+
+# Worker-Only
+if [ "$NODE_KIND" == "worker" ]; then
+    echo "--> Installing Docker..."
+    curl -fsSL https://get.docker.com -o get-docker.sh 
+    sudo sh get-docker.sh
+    sudo rm -f get-docker.sh
 fi
