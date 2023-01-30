@@ -48,7 +48,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION = "2") do |config|
 
 	# --- Provisions 1...n Rancher server(s)
 	if RANCHER_ENABLED == "true" then
-		end
 		(1..num_rancher_server).each do |rancher|
 			config.vm.define "#{rancher_server_definition[rancher-1]["vname"]}" do |node|
 				node.vm.box = VM_BOX_OS_RANCHERSERVER
